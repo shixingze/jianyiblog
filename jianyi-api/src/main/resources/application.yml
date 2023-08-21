@@ -1,0 +1,45 @@
+eureka:
+  client:
+    serviceUrl: #注册中心的注册地址
+#      defaultZone: http://localhost:10010/eureka/
+      defaultZone: http://43.143.173.212:10010/eureka/
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}-${server.port}
+    hostname: 43.143.173.212
+    ip-address: true
+
+server:
+  port: 8099
+  servlet:
+    context-path: /
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://ip:3306/jianyiblog?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.jdbc.Driver
+  application:
+    name: jianyi-api
+  main:
+    allow-bean-definition-overriding: true
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.jianyi.jianyiblog.entity
+
+jianyi:
+  jwt:
+    header: Authorization
+    expire: 480 #min
+    secret: abcdefghabcdefghabcdefghabcdefgh
+
+
+    # 日志配置
+    logging:
+      level:
+        com.jianyi: debug
+        org.springframework: warn
+file:
+#  upload-path: /jianyi/upload/
+  upload-path: /app/files/
+  ansj-path: /jianyi/ansj/

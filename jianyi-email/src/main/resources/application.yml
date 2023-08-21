@@ -1,0 +1,38 @@
+
+#eureka.client.serviceUrl.defaultZone=http://127.0.0.1:10010/eureka/
+#
+#mail.smtp.service=smtp.qq.com
+#mail.smtp.prot=587
+#mail.from.address=1731150369@qq.com
+#mail.from.smtp.pwd=rxiscgiivwbscdjj
+#mail.from.nickname=1731150369
+#
+#eureka:
+#  client:
+#    serviceUrl: #?????????
+#      defaultZone: http://43.143.173.212:10010/eureka/
+#  instance:
+#    instance-id: 114.115.213.111:${spring.application.name}:${server.port}
+#    hostname: 114.115.213.111
+#    ip-address: true
+eureka:
+  client:
+    serviceUrl: #?????????
+      defaultZone: http://127.0.0.1:10010/eureka/
+  instance:
+    instance-id: 127.0.0.1:${spring.application.name}:${server.port}
+    hostname: 127.0.0.1
+    ip-address: true
+
+mail:
+  service: smtp.qq.com
+  prot: 587
+  address: 1731150369@qq.com
+  pwd: rxiscgiivwbscdjj
+  nickname: 1731150369
+
+spring:
+  application:
+    name: jianyi-email
+server:
+  port: 10012

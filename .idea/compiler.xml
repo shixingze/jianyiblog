@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <option name="USE_RELEASE_OPTION" value="false" />
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jianyi-api" />
+        <module name="jianyi-rabbitmq" />
+        <module name="system" />
+        <module name="jianyi-eureka-10010-server" />
+        <module name="jianyi-email" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jianyi-consumer" target="11" />
+      <module name="jianyi-es" target="1.8" />
+      <module name="jianyi-eureka-server-10010" target="11" />
+      <module name="jianyi-producer" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="jianyi-consumer" options="-parameters" />
+      <module name="jianyi-email" options="-parameters" />
+      <module name="jianyi-es" options="-parameters" />
+      <module name="jianyi-eureka-10010-server" options="-parameters" />
+      <module name="jianyi-eureka-server-10010" options="-parameters" />
+      <module name="jianyi-producer" options="-parameters" />
+      <module name="jianyi-rabbitmq" options="-parameters" />
+    </option>
+  </component>
+</project>

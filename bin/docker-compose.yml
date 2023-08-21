@@ -1,0 +1,345 @@
+version: '3'
+
+networks:
+  - my-network
+services:
+
+  redis:
+    image: "redis:6.2.6"
+    restart: always
+    ports:
+      - "6379:6379"
+    privileged: true
+    volumes:
+      - ./redis/config:/usr/local/etc/redis
+    sysctls:
+      - net.core.somaxconn=1024
+    environment:
+       TZ: Asia/Shanghai
+    networks:
+      my-network:
+        aliases:
+          - redis
+  sqlserver:
+    container_name: sqlserver
+    image: mcr.microsoft.com/mssql/server:latest
+    ports:
+      - 1433:1433
+    volumes:
+      - ./sqlserver/data:/var/opt/mssql/data
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      my-network:
+        aliases:
+           - sqlserver
+  oracle:
+    image: registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g
+    container_name: oracle
+    privileged: true
+    #user: root
+    ports:
+      - 1521:1521
+    #volumes:
+    #  - ./oracle/data/oradata/helowin:/home/oracle/app/oracle/oradata/helowin
+    environment:
+       TZ: Asia/Shanghai
+    networks:
+      my-network:
+        aliases:
+           - oracle
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+       TZ: Asia/Shanghai
+       MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      my-network:
+        aliases:
+          - mysql
+  ygs:
+    image: ygs:latest
+    build:
+      context: ./ygs
+      dockerfile: Dockerfile
+    container_name: ygs
+    ports:
+      - "40001:8087"
+    #depends_on:
+    #  - redis
+    #  - mysql
+    volumes:
+      - ./ygs/files:/app/files
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql/ygsdata?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      TZ: Asia/Shanghai
+    networks:
+      my-network:
+        aliases:
+          - ygs
+  zhmt:
+    image: zhmt:latest
+    build:
+      context: ./zhmt
+      dockerfile: Dockerfile
+    container_name: zhmt
+    ports:
+      - "40002:8879"
+    #depends_on:
+    #  - redis
+    #  - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql/zhmt?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      TZ: Asia/Shanghai
+    networks:
+      my-network:
+        aliases:
+          - zhmt
+  yztf:
+    image: yztf:latest
+    build:
+      context: ./yztf
+      dockerfile: Dockerfile
+    container_name: yztf
+    ports:
+      - "40003:8089"
+    #depends_on:
+    #  - redis
+    #  - mysql
+    volumes:
+      - ./yztf/files:/app/files
+    environment:
+      TZ: Asia/Shanghai
+    networks:
+      my-network:
+        aliases:
+          - yztf
+  rzzc:
+    image: rzzc:latest
+    build:
+      context: ./rzzc
+      dockerfile: Dockerfile
+    container_name: rzzc
+    ports:
+      - "10082:10082"
+    # depends_on:
+    #  - redis
+    #  - mysql
+    #  - oracle
+    volumes:
+      - ./rzzc/files:/app/files
+    environment:
+      TZ: Asia/Shanghai
+    networks:
+      my-network:
+        aliases:
+          - rzzc
+  hhg:
+    image: hhg:latest
+    build:
+      context: ./hhg
+      dockerfile: Dockerfile
+    container_name: hhg
+    ports:
+      - "40009:9001"
+    #depends_on:
+    #  - redis
+    #  - mysql
+    volumes:
+      - ./hhg/files:/app/files
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql/hhg?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      TZ: Asia/Shanghai
+    networks:
+      my-network:
+        aliases:
+          - hhg
+  hnbw:
+    image: hnbw:latest
+    build:
+      context: ./hnbw
+      dockerfile: Dockerfile
+    container_name: hnbw
+    ports:
+      - "10000:10000"
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./hnbw/berth_system_lib:/app/berth_system_lib
+      - ./hnbw/:/app/
+    environment:
+      TZ: Asia/Shanghai
+    stdin_open: true
+    tty: true
+    networks:
+      my-network:
+        aliases:
+          - hnbw
+  hnbw_gltf:
+    image: hnbw_gltf:latest
+    build:
+      context: ./hnbw_gltf
+      dockerfile: Dockerfile
+    container_name: hnbw_gltf
+    ports:
+      - "10001:10001"
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./hnbw_gltf/generate_gltf_dock_lib:/app/generate_gltf_dock_lib
+      - ./hnbw_gltf:/app/
+    environment:
+      TZ: Asia/Shanghai
+    stdin_open: true
+    tty: true
+    networks:
+      my-network:
+        aliases:
+          - hnbw_gltf
+  yunwei:
+    image: yunwei:latest
+    build:
+      context: ./yunwei
+      dockerfile: Dockerfile
+    container_name: yunwei
+    ports:
+      - "9579:9579"
+    
+    volumes:
+      - ./yunwei/:/app/
+    environment:
+      TZ: Asia/Shanghai
+    stdin_open: true
+    tty: true
+    networks:
+      my-network:
+        aliases:
+          - yunwei
+  gw:
+    image: gw:latest
+    build:
+      context: ./gw
+      dockerfile: Dockerfile
+    container_name: gw
+    ports:
+      - "8442:8442"
+    
+    volumes:
+      - ./gw/:/app/
+    environment:
+      TZ: Asia/Shanghai
+    stdin_open: true
+    tty: true
+    networks:
+      my-network:
+        aliases:
+          - gw
+  gltf:
+    image: gltf:latest
+    build:
+      context: ./gltf
+      dockerfile: Dockerfile 
+    container_name: gltf
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./yztf/dist/Models:/app/Models
+      - ./gltf:/app
+    environment:
+      TZ: Asia/Shanghai
+    stdin_open: true
+    tty: true 
+    networks:
+       my-network:
+         aliases:
+            - gltf
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-conf/default.conf:/etc/nginx/conf.d/default.conf
+      - ./ygs/dist:/app/ygs
+      - ./jgs/dist:/app/jgs
+      - ./zhmt/dist:/app/zhmt
+      - ./yztf/dist:/app/yztf
+      - ./rzzc/dist:/app/rzzc
+      - ./hhg/dist:/app/hhg
+      - ./gw/dist:/app/gw
+      - ./yunwei/dist:/app/yunwei
+      - ./gw/files:/app/files/gw
+      - ./ygs/files:/app/files/ygs
+      - ./zhmt/files:/app/files/zhmt
+      - ./yztf/files:/app/files/yztf
+      - ./rzzc/files:/app/files/rzzc
+      - ./hnbw/files:/app/files/hnbw
+    environment:
+      TZ: Asia/Shanghai
+    depends_on:
+      - ygs
+      - zhmt
+    networks:
+      my-network:
+        aliases:
+          - nginx
+
+  frps:
+    image: snowdreamtech/frps:latest
+    container_name: frps
+    ports:
+      - "7000-7020:7000-7020"
+    networks:
+      my-network:
+        aliases:
+          - frps
+  test:
+    image: nginx
+    ports:
+      - "90:80"
+    sysctls:
+      - net.core.somaxconn=1024
+    networks:
+      my-network:
+        aliases:
+           - test
+
+  gitlab:
+    image: 'gitlab/gitlab-ce:15.3.3-ce.0'
+    restart: always
+    #hostname: '47.92.6.236'
+    environment:
+      TZ: 'Asia/Shanghai'
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://47.92.6.236:90'
+        gitlab_rails['time_zone'] = 'Asia/Shanghai'
+    ports:
+        - '90:90'
+    volumes:
+      - ./gitlab/config:/etc/gitlab
+      - ./gitlab/data:/var/opt/gitlab
+      - ./gitlab/logs:/var/log/gitlab
+    deploy:
+      resources:
+        limits:
+          memory: '2G'
+    networks:
+      my-network:
+        aliases:
+          - gitlab
+networks:
+  my-network:
+

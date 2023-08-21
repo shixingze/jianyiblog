@@ -1,0 +1,30 @@
+version: '3'
+
+
+services:
+
+  jianyi-api:
+    image: jianyi-api:latest
+    build:
+      context: ./jianyi-api
+      dockerfile: Dockerfile
+    container_name: jianyi-api
+    ports:
+      - "8099:8099"
+    
+    volumes:
+      - ./jianyi-api/:/app/
+    environment:
+      TZ: Asia/Shanghai
+    stdin_open: true
+    tty: true
+    networks:
+      my-network:
+        aliases:
+          - jianyi-api
+  
+
+  
+networks:
+  - my-network
+
