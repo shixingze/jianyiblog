@@ -8,27 +8,24 @@ jainyi 博客系统
 
 #### 结构
 
-1.  ---db 数据库脚本文件
-2.  ---system 博客功能模块
-
+ ###### jianyi-api 核心模块 包含权限、博客相关功能
+ ###### jianyi-api-db数据库sql文件
+###### jianyi-email 邮箱验证码发送模块
+###### jianyi-eureka 注册中心模块
+###### jianyi-rabbitmq 消息队列模块
 #### 运行
 
 1.  运行 JianyiBlogApplication.java 进行后台的运行  注意配置数据库文件
 2.  前端 配置端口ip 则可直接运行 npm run dev
 
-#### Contribution
+#### 相关图片
+1、首页
+![img.png](img.png)
+2、文章列表
+![img_1.png](img_1.png)
+3、文章详情页
+![img_2.png](img_2.png)
 
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
-
-
-#### Gitee Feature
-
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)_
+一起创造
+qq 1731150369
+wx ze_213

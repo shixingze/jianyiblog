@@ -7,7 +7,7 @@ import com.example.jianyiemail.utils.MailSender;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sun.applet.Main;
+
 
 import java.util.ArrayList;
 
